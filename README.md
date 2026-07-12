@@ -173,31 +173,33 @@ Ran 36 tests ... OK
 
 ## Screenshots
 
-<!-- Drop images into docs/screenshots/ and uncomment each line below -->
+### Login
 
-**Login**
-<!-- ![Login page](docs/screenshots/01-login.jpeg) -->
+![Login](docs/screenshots/01-login.jpeg)
 
-**Dashboard — live KPIs**
-<!-- ![Dashboard](docs/screenshots/02-dashboard.jpeg) -->
+### Dashboard — Live KPIs
 
-**RBAC — sidebar comparison across roles**
-<!-- ![Sidebar comparison](docs/screenshots/03-rbac-sidebars.jpeg) -->
+![Dashboard](docs/screenshots/02-dashboard.jpeg)
 
-**Rejected and Successful dispatch **
-<!-- ![Rejected and Successful dispatch](docs/screenshots/04-dispatch-success.jpeg) -->
+### RBAC — Sidebar Comparison Across Roles
 
+![RBAC](docs/screenshots/03-rbac-sidebars.jpeg)
 
-**Maintenance — vehicle pulled from dispatch pool**
-<!-- ![Maintenance workflow](docs/screenshots/06-maintenance.jpeg) -->
+### Rejected and Successful Dispatch
 
-**Reports — fuel efficiency, cost, ROI**
-<!-- ![Reports page](docs/screenshots/07-reports.jpeg) -->
+![Dispatch](docs/screenshots/04-dispatch-success.jpeg)
 
-**CSV export**
-<!-- ![CSV export](docs/screenshots/08-csv-export.jpeg) -->
+### Maintenance — Vehicle Pulled from Dispatch Pool
 
+![Maintenance](docs/screenshots/06-maintenance.jpeg)
 
+### Reports — Fuel Efficiency, Cost, ROI
+
+![Reports](docs/screenshots/07-reports.jpeg)
+
+### CSV Export
+
+![CSV Export](docs/screenshots/08-csv-export.jpeg)
 
 ---
 
