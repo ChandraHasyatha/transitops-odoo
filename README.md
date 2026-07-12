@@ -42,7 +42,7 @@ Logistics companies running fleets on spreadsheets and manual logbooks hit the s
 
 | Area | What it does |
 |---|---|
-| **Authentication** | Email + password login, JWT-based, role embedded in the token |
+| **Authentication** | Username + password login, JWT-based, role embedded in the token |
 | **RBAC** | 4 distinct roles, each with a scoped sidebar and server-enforced permissions |
 | **Vehicle Registry** | Full CRUD, unique registration number, 4-state lifecycle |
 | **Driver Management** | Full CRUD, license expiry tracking, safety score, 4-state lifecycle |
@@ -176,26 +176,26 @@ Ran 36 tests ... OK
 <!-- Drop images into docs/screenshots/ and uncomment each line below -->
 
 **Login**
-<!-- ![Login page](docs/screenshots/01-login.png) -->
+<!-- ![Login page](docs/screenshots/01-login.jpeg) -->
 
 **Dashboard — live KPIs**
-<!-- ![Dashboard](docs/screenshots/02-dashboard.png) -->
+<!-- ![Dashboard](docs/screenshots/02-dashboard.jpeg) -->
 
 **RBAC — sidebar comparison across roles**
-<!-- ![Sidebar comparison](docs/screenshots/03-rbac-sidebars.png) -->
+<!-- ![Sidebar comparison](docs/screenshots/03-rbac-sidebars.jpeg) -->
 
 **Rejected and Successful dispatch **
-<!-- ![Rejected and Successful dispatch](docs/screenshots/04-dispatch-success.png) -->
+<!-- ![Rejected and Successful dispatch](docs/screenshots/04-dispatch-success.jpeg) -->
 
 
 **Maintenance — vehicle pulled from dispatch pool**
-<!-- ![Maintenance workflow](docs/screenshots/06-maintenance.png) -->
+<!-- ![Maintenance workflow](docs/screenshots/06-maintenance.jpeg) -->
 
 **Reports — fuel efficiency, cost, ROI**
-<!-- ![Reports page](docs/screenshots/07-reports.png) -->
+<!-- ![Reports page](docs/screenshots/07-reports.jpeg) -->
 
 **CSV export**
-<!-- ![CSV export](docs/screenshots/08-csv-export.png) -->
+<!-- ![CSV export](docs/screenshots/08-csv-export.jpeg) -->
 
 
 
