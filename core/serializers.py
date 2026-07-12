@@ -1,6 +1,8 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import Vehicle, Driver,MaintenanceLog, FuelLog, Expense
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import Vehicle, Driver, MaintenanceLog, FuelLog, Expense, Trip
+
+
 class RoleTokenSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -8,6 +10,8 @@ class RoleTokenSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
         token['username'] = user.username
         return token
+
+
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
@@ -21,16 +25,27 @@ class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
         fields = '__all__'
+
+
+class TripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        fields = '__all__'
+        read_only_fields = ('status', 'created_at')
+
+
 class MaintenanceLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = MaintenanceLog
         fields = '__all__'
         read_only_fields = ['closed_at']
 
+
 class FuelLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = FuelLog
         fields = '__all__'
+
 
 class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
