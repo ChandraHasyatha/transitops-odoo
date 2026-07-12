@@ -1,8 +1,8 @@
-# TransitOps — Smart Transport Operations Platform
+# TrackBay — Smart Transport Operations Platform
 
-**A role-based fleet management platform that replaces spreadsheets and manual logbooks with automated business-rule enforcement, live status tracking, and operational analytics.**
+**TrackBay** is a role-based fleet management platform that replaces spreadsheets and manual logbooks with automated business-rule enforcement, live fleet tracking, and operational analytics.
 
-Built in an 8-hour hackathon sprint.
+🚚 Built during an **8-hour Hackathon**.
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-5.x-092E20?logo=django&logoColor=white)
@@ -11,201 +11,275 @@ Built in an 8-hour hackathon sprint.
 ![Vite](https://img.shields.io/badge/Vite-Fast%20Build-646CFF?logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwindcss&logoColor=white)
 ![JWT](https://img.shields.io/badge/Auth-JWT-black?logo=jsonwebtokens)
-![Tests](https://img.shields.io/badge/Tests-36%20passing-brightgreen?logo=pytest&logoColor=white)
+![Tests](https://img.shields.io/badge/Tests-36%20Passing-brightgreen?logo=pytest&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
-## Table of Contents
+# Table of Contents
 
-- [The Problem](#the-problem)
-- [What We Built](#what-we-built)
-- [Why It Stands Out](#why-it-stands-out)
-- [Role-Based Access Control](#role-based-access-control)
-- [The 9 Business Rules](#the-9-business-rules)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Testing](#testing)
-- [Screenshots](#screenshots)
-- [Team](#team)
-
----
-
-## The Problem
-
-Logistics companies running fleets on spreadsheets and manual logbooks hit the same failures on repeat: vehicles double-booked, drivers dispatched on expired licenses, vehicles left in the rotation while sitting in a repair shop, and no real-time answer to "what's our fleet utilization right now?" TransitOps digitizes the full lifecycle — vehicles, drivers, dispatch, maintenance, expenses — and makes those failure modes **structurally impossible**, not just discouraged.
+- Problem Statement
+- Key Features
+- Role-Based Access Control
+- Business Rules
+- Architecture
+- Tech Stack
+- Getting Started
+- Testing
+- Screenshots
+- Team
 
 ---
 
-## What We Built
+# Problem Statement
 
-| Area | What it does |
-|---|---|
-| **Authentication** | Username + password login, JWT-based, role embedded in the token |
-| **RBAC** | 4 distinct roles, each with a scoped sidebar and server-enforced permissions |
-| **Vehicle Registry** | Full CRUD, unique registration number, 4-state lifecycle |
-| **Driver Management** | Full CRUD, license expiry tracking, safety score, 4-state lifecycle |
-| **Trip Management** | Draft → Dispatched → Completed → Cancelled, automatic status transitions |
-| **Maintenance Workflow** | Opening a record pulls a vehicle from dispatch instantly; closing restores it |
-| **Fuel & Expense Tracking** | Per-vehicle logs feeding automatic operational cost calculation |
-| **Dashboard** | Live KPIs — utilization, active/pending trips, drivers on duty |
-| **Reports & Analytics** | Fuel efficiency, operational cost, Vehicle ROI, streaming CSV export |
+Fleet and logistics companies often rely on spreadsheets and manual logbooks to manage vehicles, drivers, maintenance, dispatch, fuel usage, and operational expenses. This frequently results in:
 
----
+- Double-booked vehicles
+- Expired driver licenses going unnoticed
+- Vehicles dispatched while under maintenance
+- Poor visibility into fleet utilization
+- Inefficient expense tracking
+- Lack of operational insights
 
-## Why It Stands Out
-
-- **RBAC is enforced on the backend, not faked in the UI.** Every write endpoint checks the requester's role server-side via DRF permission classes — the boundary holds even against a direct API call, not just a hidden button.
-- **All 9 mandatory business rules are independently unit-tested.** 36 automated tests covering the rule engine, the trip/maintenance state machine, and the reporting math — including edge cases like "cargo exactly at capacity."
-- **Validation failures return all at once, not one at a time.** Dispatch a suspended driver with overweight cargo and get both errors in a single response.
-- **CSV export streams instead of buffering** — won't choke on a large trip/fuel history.
-- **Seeded with realistic demo data** — 30 vehicles, 30 drivers, varied regions/types/statuses — so the dashboard shows meaningful numbers, not one lonely test record.
+**TrackBay** solves these challenges by providing a centralized transport management platform with automated validation, role-based access control, and real-time operational reporting.
 
 ---
 
-## Role-Based Access Control
+# Key Features
 
-| Role | Sidebar | Can do |
-|---|---|---|
-| **Fleet Manager** — oversees fleet assets, maintenance, vehicle lifecycle | Dashboard, Vehicles, Maintenance | Full Vehicle CRUD, open/close Maintenance records |
-| **Dispatcher** — creates trips, assigns vehicles/drivers | Dashboard, Trips | Create, dispatch, complete, cancel Trips |
-| **Safety Officer** — ensures compliance, tracks licenses | Dashboard, Drivers | Full Driver CRUD, license & safety score tracking |
-| **Financial Analyst** — reviews costs and profitability | Dashboard, Fuel & Expenses, Reports | Log fuel/expenses, view Reports, export CSV |
-
-Dashboard is shared by every role. Everything else is scoped both in the sidebar **and** on the backend — a Dispatcher's token genuinely cannot create a Vehicle, even via a raw API call.
-
----
-
-## The 9 Business Rules
-
-All independently unit-tested, all enforced server-side:
-
-1. Vehicle registration number must be unique.
-2. Retired or In Shop vehicles never appear in the dispatch selection pool.
-3. Drivers with expired licenses or Suspended status cannot be assigned to trips.
-4. A vehicle or driver already On Trip cannot be assigned to another trip.
-5. Cargo weight must not exceed the vehicle's maximum load capacity.
-6. Dispatching a trip sets both vehicle and driver to On Trip.
-7. Completing a trip restores both to Available.
-8. Cancelling a dispatched trip restores both to Available.
-9. Creating active maintenance forces the vehicle to In Shop; closing restores Available (unless Retired).
+- 🔐 JWT Authentication
+- 👥 Role-Based Access Control (RBAC)
+- 🚛 Vehicle Management
+- 👨‍✈️ Driver Management
+- 📦 Trip Lifecycle Management
+- 🛠 Maintenance Workflow
+- ⛽ Fuel Log Management
+- 💰 Expense Tracking
+- 📊 Live Dashboard KPIs
+- 📈 Reports & Analytics
+- 📄 CSV Export
+- ✅ Automated Business Rule Validation
 
 ---
 
-## Architecture
+# What We Built
+
+| Module | Description |
+|---------|-------------|
+| Authentication | JWT Login with embedded user roles |
+| RBAC | Fleet Manager, Dispatcher, Safety Officer & Financial Analyst |
+| Vehicle Registry | CRUD with unique registration validation |
+| Driver Management | CRUD with license expiry & safety tracking |
+| Trip Management | Draft → Dispatched → Completed → Cancelled |
+| Maintenance | Automatic vehicle availability handling |
+| Fuel & Expense | Vehicle-wise operational tracking |
+| Dashboard | Live KPIs & fleet utilization |
+| Reports | Fuel Efficiency, ROI, Operational Cost |
+| CSV Export | Export reports in CSV format |
+
+---
+
+# Role-Based Access Control
+
+| Role | Access |
+|------|--------|
+| Fleet Manager | Dashboard, Vehicles, Maintenance |
+| Dispatcher | Dashboard, Trips |
+| Safety Officer | Dashboard, Drivers |
+| Financial Analyst | Dashboard, Fuel Logs, Expenses, Reports |
+
+Role validation is enforced on the backend using Django REST Framework permission classes.
+
+---
+
+# Business Rules
+
+The system enforces the following rules automatically:
+
+1. Vehicle registration numbers must be unique.
+2. Vehicles in **Maintenance** or **Retired** state cannot be dispatched.
+3. Suspended or expired-license drivers cannot be assigned.
+4. Drivers or vehicles already on an active trip cannot be reused.
+5. Cargo cannot exceed vehicle capacity.
+6. Dispatch updates both vehicle and driver status to **On Trip**.
+7. Completing a trip restores both to **Available**.
+8. Cancelling a dispatched trip restores resources.
+9. Maintenance automatically updates vehicle availability.
+
+All business rules are independently tested.
+
+---
+
+# Architecture
 
 ```mermaid
 flowchart LR
-    subgraph Client["React Frontend"]
-        UI["Pages: Dashboard, Vehicles,
-Drivers, Trips, Maintenance,
-Fuel & Expenses, Reports"]
-        Auth["AuthContext
-JWT decode + role"]
-        UI --> Auth
-    end
 
-    subgraph API["Django REST Framework"]
-        Views["Role-Protected ViewSets"]
-        Perms["permissions.py
-IsFleetManager / IsDispatcher /
-IsSafetyOfficer / IsFinancialAnalyst"]
-        Services["core/services/
-rules.py · state_machine.py
-reports.py · csv_export.py"]
-        Views --> Perms
-        Views --> Services
-    end
+Client["React Frontend"]
+API["Django REST Framework"]
+Services["Business Rule Engine"]
+DB[("SQLite/PostgreSQL")]
 
-    DB[("SQLite / Postgres
-Vehicles · Drivers · Trips
-MaintenanceLogs · FuelLogs · Expenses")]
-
-    Client -- "JWT Bearer token" --> API
-    API --> DB
+Client --> API
+API --> Services
+Services --> DB
 ```
 
-The core business logic (`core/services/`) has **zero Django dependency** — plain Python, unit-tested before the database models even existed, built in parallel with the rest of the team.
+The business-rule engine is isolated from Django models, making it independently testable.
 
 ---
 
-## Tech Stack
+# Tech Stack
 
-**Backend:** Django 5 · Django REST Framework · `djangorestframework-simplejwt` · `django-filter` · SQLite (dev)
-**Frontend:** React · Vite · React Router · Tailwind CSS · Axios · `jwt-decode`
-**Testing:** Django `TestCase` — 36 tests spanning pure-Python rule logic, state machine transitions, reporting math, and full end-to-end API calls
+### Backend
+
+- Django 5
+- Django REST Framework
+- Simple JWT
+- Django Filter
+- SQLite
+
+### Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- Axios
+- React Router
+
+### Testing
+
+- Django TestCase
+- 36 Automated Tests
 
 ---
 
-## Getting Started
+# Getting Started
+
+## Backend
 
 ```bash
-# Backend
-cd transitops-odoo
-python -m venv venv && source venv/bin/activate   # venv\Scripts\activate on Windows
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py seed_data          
-python manage.py createsuperuser
-python manage.py runserver
+git clone <repository-url>
 
-# Frontend
-cd transitops_frontend
+cd TrackBay
+
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux / macOS
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python manage.py migrate
+
+python manage.py seed_data
+
+python manage.py createsuperuser
+
+python manage.py runserver
+```
+
+## Frontend
+
+```bash
+cd frontend
+
 npm install
+
 npm run dev
 ```
 
-Accounts are pre-created by a Fleet Manager via Django admin — no self-signup, by design.
+---
+
+# Demo Credentials
+
+Create users from Django Admin.
+
+Example:
+
+| Username | Role |
+|-----------|------|
+| fleet | Fleet Manager |
+| dispatcher | Dispatcher |
+| safety | Safety Officer |
+| finance | Financial Analyst |
 
 ---
 
-## Testing
+# Testing
+
+Run all tests:
 
 ```bash
 python manage.py test core.tests core.tests_smoke -v 2
 ```
+
+Expected:
+
 ```
 Ran 36 tests ... OK
 ```
 
 ---
 
-## Screenshots
+# Screenshots
 
-### Login
+## Login
 
 ![Login](docs/screenshots/01-login.jpeg)
 
-### Dashboard — Live KPIs
+---
+
+## Dashboard
 
 ![Dashboard](docs/screenshots/02-dashboard.jpeg)
 
-### RBAC — Sidebar Comparison Across Roles
+---
+
+## RBAC
 
 ![RBAC](docs/screenshots/03-rbac-sidebars.jpeg)
 
-### Rejected and Successful Dispatch
+---
+
+## Trip Dispatch
 
 ![Dispatch](docs/screenshots/04-dispatch-success.jpeg)
 
-### Maintenance — Vehicle Pulled from Dispatch Pool
+---
+
+## Maintenance
 
 ![Maintenance](docs/screenshots/06-maintenance.jpeg)
 
-### Reports — Fuel Efficiency, Cost, ROI
+---
+
+## Reports
 
 ![Reports](docs/screenshots/07-reports.jpeg)
 
-### CSV Export
+---
+
+## CSV Export
 
 ![CSV Export](docs/screenshots/08-csv-export.jpeg)
 
 ---
 
+# Team
 
-## Team
+| Member | Responsibility |
+|----------|----------------|
+| **Krishna Priya S** | Backend – Models, Authentication, RBAC, CRUD APIs |
+| **Yamini S** | Backend – Business Rules, Trip Lifecycle, Reports, CSV Export |
+| **Vuyyuru Chandra Hasyatha** | Frontend – React UI, Routing, Dashboard, Role-Based Interface |
 
-- **Backend — models, auth, RBAC, CRUD:** Krishna Priya S
-- **Backend — rules engine, state machine, reports, CSV:** Yamini S
-- **Frontend — UI, routing, role-aware layout:** Vuyyuru Chandra Hasyatha 
+---
+
+## Built For
+
+**Hackathon Project • TrackBay – Smart Transport Operations Platform**
