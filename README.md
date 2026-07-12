@@ -12,7 +12,7 @@
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwindcss&logoColor=white)
 ![JWT](https://img.shields.io/badge/Auth-JWT-black?logo=jsonwebtokens)
 ![Tests](https://img.shields.io/badge/Tests-36%20Passing-brightgreen?logo=pytest&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
 
 ---
 
@@ -111,25 +111,39 @@ All business rules are independently tested.
 
 ---
 
-# Architecture
-
-```mermaid
+## Architecture
+mermaid
 flowchart LR
+    subgraph Client["React Frontend"]
+        UI["Pages: Dashboard, Vehicles,
+Drivers, Trips, Maintenance,
+Fuel & Expenses, Reports"]
+        Auth["AuthContext
+JWT decode + role"]
+        UI --> Auth
+    end
 
-Client["React Frontend"]
-API["Django REST Framework"]
-Services["Business Rule Engine"]
-DB[("SQLite/PostgreSQL")]
+    subgraph API["Django REST Framework"]
+        Views["Role-Protected ViewSets"]
+        Perms["permissions.py
+IsFleetManager / IsDispatcher /
+IsSafetyOfficer / IsFinancialAnalyst"]
+        Services["core/services/
+rules.py · state_machine.py
+reports.py · csv_export.py"]
+        Views --> Perms
+        Views --> Services
+    end
 
-Client --> API
-API --> Services
-Services --> DB
-```
+    DB[("SQLite / Postgres
+Vehicles · Drivers · Trips
+MaintenanceLogs · FuelLogs · Expenses")]
 
-The business-rule engine is isolated from Django models, making it independently testable.
+    Client -- "JWT Bearer token" --> API
+    API --> DB
+The core business logic (core/services/) has **zero Django dependency** — plain Python, unit-tested before the database models even existed, built in parallel with the rest of the team. 
 
 ---
-
 # Tech Stack
 
 ### Backend
