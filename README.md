@@ -110,9 +110,53 @@ The system enforces the following rules automatically:
 All business rules are independently tested.
 
 ---
+# Screenshots
+
+## Login
+
+![Login](docs/screenshots/01-login.jpeg)
+
+---
+
+## Dashboard
+
+![Dashboard](docs/screenshots/02-dashboard.jpeg)
+
+---
+
+## RBAC
+
+![RBAC](docs/screenshots/03-rbac-sidebars.jpeg)
+
+---
+
+## Trip Dispatch
+
+![Dispatch](docs/screenshots/04-dispatch-success.jpeg)
+
+---
+
+## Maintenance
+
+![Maintenance](docs/screenshots/06-maintenance.jpeg)
+
+---
+
+## Reports
+
+![Reports](docs/screenshots/07-reports.jpeg)
+
+---
+
+## CSV Export
+
+![CSV Export](docs/screenshots/08-csv-export.jpeg)
+
+---
 
 ## Architecture
-mermaid
+
+```mermaid
 flowchart LR
     subgraph Client["React Frontend"]
         UI["Pages: Dashboard, Vehicles,
@@ -135,15 +179,18 @@ reports.py · csv_export.py"]
         Views --> Services
     end
 
-    DB[("SQLite / Postgres
+    DB[("SQLite / PostgreSQL
 Vehicles · Drivers · Trips
 MaintenanceLogs · FuelLogs · Expenses")]
 
-    Client -- "JWT Bearer token" --> API
+    Client -- "JWT Bearer Token" --> API
     API --> DB
-The core business logic (core/services/) has **zero Django dependency** — plain Python, unit-tested before the database models even existed, built in parallel with the rest of the team. 
+```
+
+The core business logic (`core/services/`) has **zero Django dependency**. It is implemented as plain Python, independently unit-tested, and was developed in parallel with the database models.
 
 ---
+
 # Tech Stack
 
 ### Backend
@@ -237,51 +284,6 @@ Expected:
 ```
 Ran 36 tests ... OK
 ```
-
----
-
-# Screenshots
-
-## Login
-
-![Login](docs/screenshots/01-login.jpeg)
-
----
-
-## Dashboard
-
-![Dashboard](docs/screenshots/02-dashboard.jpeg)
-
----
-
-## RBAC
-
-![RBAC](docs/screenshots/03-rbac-sidebars.jpeg)
-
----
-
-## Trip Dispatch
-
-![Dispatch](docs/screenshots/04-dispatch-success.jpeg)
-
----
-
-## Maintenance
-
-![Maintenance](docs/screenshots/06-maintenance.jpeg)
-
----
-
-## Reports
-
-![Reports](docs/screenshots/07-reports.jpeg)
-
----
-
-## CSV Export
-
-![CSV Export](docs/screenshots/08-csv-export.jpeg)
-
 ---
 
 # Team
