@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import logo from "../assets/logo.jpg";
@@ -13,6 +14,8 @@ import {
   FaSignOutAlt,
   FaUserCircle,
   FaIdBadge,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
 const NAV = [
@@ -34,11 +37,47 @@ const ROLE_LABEL = {
 
 export default function Layout() {
   const { user, logout } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-[#F5F6F8]">
-      {/* Sidebar */}
-      <aside className="flex w-72 shrink-0 flex-col bg-console-bg text-slate-300">
+      {/* Mobile topbar — visible below md, hidden on desktop */}
+      <div className="fixed inset-x-0 top-0 z-30 flex items-center justify-between bg-console-bg px-4 py-3 text-white md:hidden">
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="TransitOps" className="h-8 w-8 rounded-full object-cover" />
+          <span className="mono text-lg font-bold tracking-widest text-amber-400">TRANSITOPS</span>
+        </div>
+        <button
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open menu"
+          className="rounded-md p-2 hover:bg-white/10"
+        >
+          <FaBars className="text-xl" />
+        </button>
+      </div>
+
+      {/* Backdrop, mobile only, shown when drawer is open */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Sidebar — fixed on desktop (md+), off-canvas drawer on mobile */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col bg-console-bg text-slate-300 transition-transform duration-300 md:static md:translate-x-0 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Close button, mobile only */}
+        <button
+          onClick={() => setMobileOpen(false)}
+          aria-label="Close menu"
+          className="absolute right-3 top-3 rounded-md p-2 text-slate-300 hover:bg-white/10 md:hidden"
+        >
+          <FaTimes className="text-xl" />
+        </button>
 
         {/* Logo Section */}
         <div className="bg-gradient-to-r from-slate-800 to-blue-900 border-b border-white/10 flex flex-col items-center px-5 py-6">
@@ -62,12 +101,13 @@ export default function Layout() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-2 px-3 py-4">
+        <nav className="flex-1 space-y-2 overflow-y-auto px-3 py-4">
           {NAV.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.to === "/"}
+              onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-all duration-300 ${
                   isActive
@@ -119,8 +159,8 @@ export default function Layout() {
 
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto px-8 py-8">
+      {/* Main Content — top padding on mobile clears the fixed topbar */}
+      <main className="flex-1 overflow-y-auto px-4 py-6 pt-20 md:px-8 md:py-8 md:pt-8">
         <Outlet />
       </main>
     </div>
