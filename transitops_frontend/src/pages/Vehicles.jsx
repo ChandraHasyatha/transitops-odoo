@@ -27,22 +27,24 @@ export default function Vehicles() {
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [err, setErr] = useState('')
+  const [sortKey, setSortKey] = useState(null)
+  const [sortDir, setSortDir] = useState('asc')
 
   useEffect(() => {
     load()
   }, [filters])
 
   async function load() {
-  try {
-    const { search, ...apiFilters } = filters
-    const params = Object.fromEntries(Object.entries(apiFilters).filter(([, v]) => v))
-    const { data } = await vehiclesApi.list(params)
-    setVehicles(data.results || data)
-    setErr('')
-  } catch {
-    setErr('Could not load vehicles.')
+    try {
+      const { search, ...apiFilters } = filters
+      const params = Object.fromEntries(Object.entries(apiFilters).filter(([, v]) => v))
+      const { data } = await vehiclesApi.list(params)
+      setVehicles(data.results || data)
+      setErr('')
+    } catch {
+      setErr('Could not load vehicles.')
+    }
   }
-}
 
   function openCreate() {
     setEditing(null)
@@ -54,6 +56,20 @@ export default function Vehicles() {
     setEditing(v)
     setForm(v)
     setModalOpen(true)
+  }
+
+  function toggleSort(key) {
+    if (sortKey === key) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortKey(key)
+      setSortDir('asc')
+    }
+  }
+
+  function sortIndicator(key) {
+    if (sortKey !== key) return <span className="ml-1 text-slate-600">⇅</span>
+    return <span className="ml-1 text-white">{sortDir === 'asc' ? '↑' : '↓'}</span>
   }
 
   async function handleSubmit(e) {
@@ -82,12 +98,35 @@ export default function Vehicles() {
     load()
   }
 
-  const visible = filters.search
-  ? vehicles.filter(v =>
-      v.registration_number.toLowerCase().includes(filters.search.toLowerCase()) ||
-      v.model_name.toLowerCase().includes(filters.search.toLowerCase())
-    )
-  : vehicles
+  const filtered = filters.search
+    ? vehicles.filter(
+        (v) =>
+          v.registration_number.toLowerCase().includes(filters.search.toLowerCase()) ||
+          v.model_name.toLowerCase().includes(filters.search.toLowerCase())
+      )
+    : vehicles
+
+  const visible = sortKey
+    ? [...filtered].sort((a, b) => {
+        const av = a[sortKey]
+        const bv = b[sortKey]
+        const cmp =
+          typeof av === 'number' || typeof bv === 'number'
+            ? Number(av) - Number(bv)
+            : String(av ?? '').localeCompare(String(bv ?? ''))
+        return sortDir === 'asc' ? cmp : -cmp
+      })
+    : filtered
+
+  const sortableColumns = [
+    { key: 'registration_number', label: 'Registration' },
+    { key: 'model_name', label: 'Model' },
+    { key: 'vehicle_type', label: 'Type' },
+    { key: 'max_load_kg', label: 'Max Load' },
+    { key: 'odometer', label: 'Odometer' },
+    { key: 'status', label: 'Status' },
+    { key: 'region', label: 'Region' },
+  ]
 
   return (
     <div>
@@ -146,13 +185,15 @@ export default function Vehicles() {
           <table className="w-full text-sm bg-white dark:bg-slate-800">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
               <tr>
-                <th className="px-4 py-3">Registration</th>
-                <th className="px-4 py-3">Model</th>
-                <th className="px-4 py-3">Type</th>
-                <th className="px-4 py-3">Max Load</th>
-                <th className="px-4 py-3">Odometer</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Region</th>
+                {sortableColumns.map(({ key, label }) => (
+                  <th
+                    key={key}
+                    className={`cursor-pointer select-none px-4 py-3 hover:text-slate-200 ${sortKey === key ? 'text-slate-200' : ''}`}
+                    onClick={() => toggleSort(key)}
+                  >
+                    {label}{sortIndicator(key)}
+                  </th>
+                ))}
                 {writable && <th className="px-4 py-3"></th>}
               </tr>
             </thead>
@@ -162,10 +203,10 @@ export default function Vehicles() {
                   <td className="mono px-4 py-3 font-medium dark:text-slate-200">{v.registration_number}</td>
                   <td className="px-4 py-3 dark:text-slate-300">{v.model_name}</td>
                   <td className="px-4 py-3 dark:text-slate-300">{v.vehicle_type}</td>
-                  <td className="mono px-4 py-3">{v.max_load_kg} kg</td>
-                  <td className="mono px-4 py-3">{v.odometer} km</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">{v.max_load_kg} kg</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">{v.odometer} km</td>
                   <td className="px-4 py-3"><StatusBadge status={v.status} /></td>
-                  <td className="px-4 py-3">{v.region || '—'}</td>
+                  <td className="px-4 py-3 dark:text-slate-300">{v.region || '—'}</td>
                   {writable && (
                     <td className="space-x-3 px-4 py-3 text-right">
                       <button onClick={() => openEdit(v)} className="text-signal-blue hover:underline">Edit</button>

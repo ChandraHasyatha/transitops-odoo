@@ -70,9 +70,9 @@ export default function FuelExpenses() {
                 <tbody className="divide-y divide-slate-100">
                   {fuelLogs.map((f) => (
                     <tr key={f.id}>
-                      <td className="mono px-4 py-3">{f.vehicle_registration || vehicleLabel(f.vehicle)}</td>
-                      <td className="mono px-4 py-3">{f.liters} L</td>
-                      <td className="mono px-4 py-3">₹{f.cost}</td>
+                      <td className="mono px-4 py-3 dark:text-slate-300">{f.vehicle_registration || vehicleLabel(f.vehicle)}</td>
+                      <td className="mono px-4 py-3 dark:text-slate-300">{f.liters} L</td>
+                      <td className="mono px-4 py-3 dark:text-slate-300">₹{f.cost}</td>
                       <td className="px-4 py-3 text-slate-500">{f.date}</td>
                     </tr>
                   ))}
