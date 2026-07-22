@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import RoleTokenSerializer,VehicleSerializer,DriverSerializer,MaintenanceLogSerializer, FuelLogSerializer, ExpenseSerializer
+from .serializers import RoleTokenSerializer,RegisterSerializer,VehicleSerializer,DriverSerializer,MaintenanceLogSerializer, FuelLogSerializer, ExpenseSerializer
 from .models import Vehicle, Driver,MaintenanceLog, FuelLog, Expense,Trip
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics, status
 from .permissions import IsFleetManager,IsSafetyOfficer,IsFinancialAnalyst
 from django.utils import timezone
 from rest_framework.views import APIView
@@ -13,6 +13,29 @@ from django.db.models import Count
 
 class RoleTokenView(TokenObtainPairView):
     serializer_class = RoleTokenSerializer
+
+
+class RegisterView(generics.CreateAPIView):
+    """
+    POST /api/register/  { full_name, email, password, confirm_password, role }
+    Open to anyone (AllowAny) — this is how new users get into the database
+    without an admin manually creating them in Django Admin.
+    """
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response(
+            {
+                'message': 'Registration successful. You can now log in.',
+                'email': user.email,
+                'role': user.role,
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class VehicleViewSet(viewsets.ModelViewSet):
