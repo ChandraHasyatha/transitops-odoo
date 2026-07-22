@@ -55,12 +55,12 @@ export default function Dashboard() {
           placeholder="Filter by vehicle type"
           value={filters.vehicle_type}
           onChange={(e) => setFilters((f) => ({ ...f, vehicle_type: e.target.value }))}
-          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white"
         />
         <select
           value={filters.status}
           onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
-          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white"
         >
           <option value="">All statuses</option>
           {STATUS_OPTIONS.map((s) => (
@@ -71,19 +71,19 @@ export default function Dashboard() {
           placeholder="Filter by region"
           value={filters.region}
           onChange={(e) => setFilters((f) => ({ ...f, region: e.target.value }))}
-          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white"
         />
       </div>
 
       {!data ? (
-        <p className="text-sm text-slate-400">Loading…</p>
+        <p className="text-sm text-slate-400 dark:text-slate-500">Loading…</p>
       ) : (
         <>
           <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
             {KPI_DEFS.map((kpi) => (
-              <div key={kpi.key} className="rounded-lg border border-slate-200 bg-white p-4">
-                <p className="text-xs uppercase tracking-wide text-slate-400">{kpi.label}</p>
-                <p className="mono mt-1 text-2xl font-semibold text-console-bg">
+              <div key={kpi.key} className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
+                <p className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">{kpi.label}</p>
+                <p className="mono mt-1 text-2xl font-semibold text-console-bg dark:text-white">
                   {data[kpi.key]}
                   {kpi.suffix || ''}
                 </p>
@@ -91,8 +91,8 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-white p-6">
-            <h2 className="mb-4 text-sm font-semibold text-slate-500">Fleet Status Breakdown</h2>
+          <div className="rounded-lg border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+            <h2 className="mb-4 text-sm font-semibold text-slate-500 dark:text-slate-400">Fleet Status Breakdown</h2>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

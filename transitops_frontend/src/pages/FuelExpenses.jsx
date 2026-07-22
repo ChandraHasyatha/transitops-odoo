@@ -56,13 +56,13 @@ export default function FuelExpenses() {
       <div className="grid gap-8 lg:grid-cols-2">
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-slate-500">Fuel Logs</h2>
+            <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400">Fuel Logs</h2>
             <button onClick={() => setFuelModal(true)} className="text-sm font-medium text-signal-blue hover:underline">+ Log Fuel</button>
           </div>
           {fuelLogs.length === 0 ? (
             <EmptyState label="No fuel logs yet" />
           ) : (
-            <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+            <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
               <table className="w-full text-sm">
                 <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
                   <tr><th className="px-4 py-3">Vehicle</th><th className="px-4 py-3">Liters</th><th className="px-4 py-3">Cost</th><th className="px-4 py-3">Date</th></tr>
@@ -90,12 +90,12 @@ export default function FuelExpenses() {
           {expenses.length === 0 ? (
             <EmptyState label="No expenses yet" />
           ) : (
-            <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+            <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
               <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
+                <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
                   <tr><th className="px-4 py-3">Vehicle</th><th className="px-4 py-3">Category</th><th className="px-4 py-3">Amount</th><th className="px-4 py-3">Date</th></tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                   {expenses.map((e) => (
                     <tr key={e.id}>
                       <td className="mono px-4 py-3">{e.vehicle_registration || vehicleLabel(e.vehicle)}</td>

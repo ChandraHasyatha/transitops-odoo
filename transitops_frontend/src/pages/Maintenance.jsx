@@ -66,9 +66,9 @@ export default function Maintenance() {
       {logs.length === 0 ? (
         <EmptyState label="No maintenance records" hint="Opening one automatically moves the vehicle to In Shop and hides it from dispatch." />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
+            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
               <tr>
                 <th className="px-4 py-3">Vehicle</th>
                 <th className="px-4 py-3">Description</th>
@@ -78,17 +78,17 @@ export default function Maintenance() {
                 {writable && <th className="px-4 py-3"></th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {logs.map((log) => (
                 <tr key={log.id}>
-                  <td className="mono px-4 py-3">{log.vehicle_registration || log.vehicle}</td>
-                  <td className="px-4 py-3">{log.description}</td>
-                  <td className="mono px-4 py-3">₹{log.cost}</td>
-                  <td className="px-4 py-3 text-slate-500">{new Date(log.created_at).toLocaleDateString()}</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">{log.vehicle_registration || log.vehicle}</td>
+                  <td className="px-4 py-3 dark:text-slate-300">{log.description}</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">₹{log.cost}</td>
+                  <td className="px-4 py-3 text-slate-500 dark:text-slate-300">{new Date(log.created_at).toLocaleDateString()}</td>
                   <td className="px-4 py-3">
                     {log.is_active
-                      ? <span className="rounded-full border border-red-200 bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">In Shop</span>
-                      : <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">Closed</span>}
+                      ? <span className="rounded-full border border-red-200 bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">In Shop</span>
+                      : <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Closed</span>}
                   </td>
                   {writable && (
                     <td className="px-4 py-3 text-right">

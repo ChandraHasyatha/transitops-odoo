@@ -109,9 +109,9 @@ export default function Reports() {
       {rows.length === 0 ? (
         <EmptyState label="No data to report yet" hint="Reports populate once vehicles have completed trips, fuel logs, and expenses." />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
+            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
               <tr>
                 <th className="px-4 py-3">Vehicle</th>
                 <th className="px-4 py-3">Status</th>
@@ -121,14 +121,14 @@ export default function Reports() {
                 <th className="px-4 py-3">ROI</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {rows.map((r) => (
                 <tr key={r.registration}>
-                  <td className="mono px-4 py-3 font-medium">{r.registration}</td>
-                  <td className="px-4 py-3 capitalize">{r.status.replace('_', ' ')}</td>
-                  <td className="mono px-4 py-3">{r.fuelEfficiency !== null ? `${r.fuelEfficiency.toFixed(1)} km/L` : '—'}</td>
-                  <td className="mono px-4 py-3">₹{r.operationalCost.toFixed(2)}</td>
-                  <td className="mono px-4 py-3">₹{r.revenue.toFixed(2)}</td>
+                  <td className="mono px-4 py-3 font-medium dark:text-slate-300">{r.registration}</td>
+                  <td className="px-4 py-3 capitalize dark:text-slate-300">{r.status.replace('_', ' ')}</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">{r.fuelEfficiency !== null ? `${r.fuelEfficiency.toFixed(1)} km/L` : '—'}</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">₹{r.operationalCost.toFixed(2)}</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">₹{r.revenue.toFixed(2)}</td>
                   <td className={`mono px-4 py-3 font-medium ${r.roi !== null && r.roi < 0 ? 'text-signal-red' : 'text-emerald-600'}`}>
                     {r.roi !== null ? r.roi.toFixed(2) : '—'}
                   </td>

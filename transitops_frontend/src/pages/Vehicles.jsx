@@ -142,9 +142,9 @@ export default function Vehicles() {
       {visible.length === 0 ? (
         <EmptyState label="No vehicles yet" hint={writable ? 'Add the first vehicle to get started.' : 'Ask a Fleet Manager to register vehicles.'} />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+          <table className="w-full text-sm bg-white dark:bg-slate-800">
+            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
               <tr>
                 <th className="px-4 py-3">Registration</th>
                 <th className="px-4 py-3">Model</th>
@@ -156,12 +156,12 @@ export default function Vehicles() {
                 {writable && <th className="px-4 py-3"></th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {visible.map((v) => (
                 <tr key={v.id}>
-                  <td className="mono px-4 py-3 font-medium">{v.registration_number}</td>
-                  <td className="px-4 py-3">{v.model_name}</td>
-                  <td className="px-4 py-3">{v.vehicle_type}</td>
+                  <td className="mono px-4 py-3 font-medium dark:text-slate-200">{v.registration_number}</td>
+                  <td className="px-4 py-3 dark:text-slate-300">{v.model_name}</td>
+                  <td className="px-4 py-3 dark:text-slate-300">{v.vehicle_type}</td>
                   <td className="mono px-4 py-3">{v.max_load_kg} kg</td>
                   <td className="mono px-4 py-3">{v.odometer} km</td>
                   <td className="px-4 py-3"><StatusBadge status={v.status} /></td>

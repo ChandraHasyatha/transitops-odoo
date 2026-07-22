@@ -138,9 +138,9 @@ export default function Trips() {
       {visible.length === 0 ? (
         <EmptyState label="No trips yet" hint={writable ? 'Create the first trip.' : 'Ask a Dispatcher to create a trip.'} />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
+            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
               <tr>
                 <th className="px-4 py-3">Route</th>
                 <th className="px-4 py-3">Vehicle</th>
@@ -151,14 +151,14 @@ export default function Trips() {
                 {writable && <th className="px-4 py-3"></th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {visible.map((t) => (
                 <tr key={t.id}>
-                  <td className="px-4 py-3">{t.source} → {t.destination}</td>
-                  <td className="mono px-4 py-3">{t.vehicle_registration || t.vehicle}</td>
-                  <td className="px-4 py-3">{t.driver_name || t.driver}</td>
-                  <td className="mono px-4 py-3">{t.cargo_weight_kg} kg</td>
-                  <td className="mono px-4 py-3">{t.planned_distance_km} km</td>
+                  <td className="px-4 py-3 dark:text-slate-300">{t.source} → {t.destination}</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">{t.vehicle_registration || t.vehicle}</td>
+                  <td className="px-4 py-3 dark:text-slate-300">{t.driver_name || t.driver}</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">{t.cargo_weight_kg} kg</td>
+                  <td className="mono px-4 py-3 dark:text-slate-300">{t.planned_distance_km} km</td>
                   <td className="px-4 py-3"><StatusBadge status={t.status} /></td>
                   {writable && (
                     <td className="space-x-3 px-4 py-3 text-right">

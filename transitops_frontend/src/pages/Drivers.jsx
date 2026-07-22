@@ -121,9 +121,9 @@ export default function Drivers() {
       {visible.length === 0 ? (
         <EmptyState label="No drivers yet" hint={writable ? 'Add the first driver profile.' : 'Ask a Safety Officer to register drivers.'} />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
+            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
               <tr>
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">License</th>
@@ -133,15 +133,15 @@ export default function Drivers() {
                 {writable && <th className="px-4 py-3"></th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {visible.map((d) => {
                 const left = daysUntil(d.license_expiry)
                 const expired = left !== null && left < 0
                 const expiringSoon = left !== null && left >= 0 && left <= 30
                 return (
                   <tr key={d.id}>
-                    <td className="px-4 py-3 font-medium">{d.name}</td>
-                    <td className="mono px-4 py-3">{d.license_number}</td>
+                    <td className="px-4 py-3 font-medium dark:text-slate-200">{d.name}</td>
+                    <td className="mono px-4 py-3 dark:text-slate-300">{d.license_number}</td>
                     <td className="px-4 py-3">
                       <span className={expired ? 'text-signal-red font-medium' : expiringSoon ? 'text-signal-amber font-medium' : ''}>
                         {d.license_expiry}
@@ -149,7 +149,7 @@ export default function Drivers() {
                       {expired && <span className="ml-2 text-xs text-signal-red">Expired — cannot be assigned</span>}
                       {!expired && expiringSoon && <span className="ml-2 text-xs text-signal-amber">Expires in {left}d</span>}
                     </td>
-                    <td className="mono px-4 py-3">{d.safety_score}</td>
+                    <td className="mono px-4 py-3 dark:text-slate-300">{d.safety_score}</td>
                     <td className="px-4 py-3"><StatusBadge status={d.status} /></td>
                     {writable && (
                       <td className="space-x-3 px-4 py-3 text-right">

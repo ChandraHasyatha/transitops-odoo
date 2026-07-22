@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useDarkMode } from "../hooks/useDarkMode";
 import logo from "../assets/logo.jpg";
 
 import {
@@ -16,6 +17,8 @@ import {
   FaIdBadge,
   FaBars,
   FaTimes,
+  FaMoon,
+  FaSun,
 } from "react-icons/fa";
 
 const NAV = [
@@ -38,9 +41,10 @@ const ROLE_LABEL = {
 export default function Layout() {
   const { user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [dark, setDark] = useDarkMode();
 
   return (
-    <div className="flex min-h-screen bg-[#F5F6F8]">
+    <div className="flex min-h-screen bg-[#F5F6F8] dark:bg-slate-900">
       {/* Mobile topbar — visible below md, hidden on desktop */}
       <div className="fixed inset-x-0 top-0 z-30 flex items-center justify-between bg-console-bg px-4 py-3 text-white md:hidden">
         <div className="flex items-center gap-2">
@@ -148,8 +152,16 @@ export default function Layout() {
           </div>
 
           <button
+            onClick={() => setDark((d) => !d)}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-white/10 py-3 text-white font-semibold transition hover:bg-white/20"
+          >
+            {dark ? <FaSun /> : <FaMoon />}
+            {dark ? "Light Mode" : "Dark Mode"}
+          </button>
+
+          <button
             onClick={logout}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-red-500 py-3 text-white font-semibold transition hover:bg-red-600"
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-red-500 py-3 text-white font-semibold transition hover:bg-red-600"
           >
             <FaSignOutAlt />
             Sign Out
