@@ -109,7 +109,7 @@ export default function Reports() {
       {rows.length === 0 ? (
         <EmptyState label="No data to report yet" hint="Reports populate once vehicles have completed trips, fuel logs, and expenses." />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
               <tr>

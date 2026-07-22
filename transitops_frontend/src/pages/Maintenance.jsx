@@ -66,7 +66,7 @@ export default function Maintenance() {
       {logs.length === 0 ? (
         <EmptyState label="No maintenance records" hint="Opening one automatically moves the vehicle to In Shop and hides it from dispatch." />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
               <tr>

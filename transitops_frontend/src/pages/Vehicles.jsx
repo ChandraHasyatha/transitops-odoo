@@ -22,7 +22,7 @@ export default function Vehicles() {
   const writable = canWrite(user, 'vehicles')
 
   const [vehicles, setVehicles] = useState([])
-  const [filters, setFilters] = useState({ vehicle_type: '', status: '', region: '' })
+  const [filters, setFilters] = useState({ vehicle_type: '', status: '', region: '', search: '' })
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
@@ -33,15 +33,16 @@ export default function Vehicles() {
   }, [filters])
 
   async function load() {
-    try {
-      const params = Object.fromEntries(Object.entries(filters).filter(([, v]) => v))
-      const { data } = await vehiclesApi.list(params)
-      setVehicles(data.results || data)
-      setErr('')
-    } catch {
-      setErr('Could not load vehicles.')
-    }
+  try {
+    const { search, ...apiFilters } = filters
+    const params = Object.fromEntries(Object.entries(apiFilters).filter(([, v]) => v))
+    const { data } = await vehiclesApi.list(params)
+    setVehicles(data.results || data)
+    setErr('')
+  } catch {
+    setErr('Could not load vehicles.')
   }
+}
 
   function openCreate() {
     setEditing(null)
@@ -81,6 +82,13 @@ export default function Vehicles() {
     load()
   }
 
+  const visible = filters.search
+  ? vehicles.filter(v =>
+      v.registration_number.toLowerCase().includes(filters.search.toLowerCase()) ||
+      v.model_name.toLowerCase().includes(filters.search.toLowerCase())
+    )
+  : vehicles
+
   return (
     <div>
       <PageHeader
@@ -100,7 +108,7 @@ export default function Vehicles() {
 
       {err && <Banner>{err}</Banner>}
 
-      <div className="mb-4 flex gap-3">
+      <div className="mb-4 flex flex-col gap-3 md:flex-row">
         <select
           value={filters.status}
           onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
@@ -123,12 +131,18 @@ export default function Vehicles() {
           onChange={(e) => setFilters((f) => ({ ...f, region: e.target.value }))}
           className={inputClass + ' w-auto bg-white'}
         />
+        <input
+          placeholder="Search registration or model..."
+          value={filters.search}
+          onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+          className={inputClass + ' w-auto bg-white'}
+        />
       </div>
 
-      {vehicles.length === 0 ? (
+      {visible.length === 0 ? (
         <EmptyState label="No vehicles yet" hint={writable ? 'Add the first vehicle to get started.' : 'Ask a Fleet Manager to register vehicles.'} />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
               <tr>
@@ -143,7 +157,7 @@ export default function Vehicles() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {vehicles.map((v) => (
+              {visible.map((v) => (
                 <tr key={v.id}>
                   <td className="mono px-4 py-3 font-medium">{v.registration_number}</td>
                   <td className="px-4 py-3">{v.model_name}</td>

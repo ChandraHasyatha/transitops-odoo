@@ -29,6 +29,7 @@ export default function Trips() {
   const [completeForm, setCompleteForm] = useState({ final_odometer: '', fuel_consumed_l: '' })
   const [form, setForm] = useState(EMPTY_FORM)
   const [err, setErr] = useState('')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     load()
@@ -104,6 +105,13 @@ export default function Trips() {
     }
   }
 
+  const visible = search
+  ? trips.filter(t =>
+      t.source.toLowerCase().includes(search.toLowerCase()) ||
+      t.destination.toLowerCase().includes(search.toLowerCase())
+    )
+  : trips
+
   return (
     <div>
       <PageHeader
@@ -119,11 +127,18 @@ export default function Trips() {
       />
 
       {err && <Banner>{err}</Banner>}
-
-      {trips.length === 0 ? (
+      <div className="mb-4">
+        <input
+          placeholder="Search by source or destination..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className={inputClass + ' w-auto bg-white'}
+        />
+      </div>
+      {visible.length === 0 ? (
         <EmptyState label="No trips yet" hint={writable ? 'Create the first trip.' : 'Ask a Dispatcher to create a trip.'} />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
               <tr>
@@ -137,7 +152,7 @@ export default function Trips() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {trips.map((t) => (
+              {visible.map((t) => (
                 <tr key={t.id}>
                   <td className="px-4 py-3">{t.source} → {t.destination}</td>
                   <td className="mono px-4 py-3">{t.vehicle_registration || t.vehicle}</td>

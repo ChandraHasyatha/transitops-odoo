@@ -28,6 +28,7 @@ export default function Drivers() {
 
   const [drivers, setDrivers] = useState([])
   const [statusFilter, setStatusFilter] = useState('')
+  const [search, setSearch] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
@@ -81,6 +82,12 @@ export default function Drivers() {
     await driversApi.update(d.id, { ...d, status: 'suspended' })
     load()
   }
+  const visible = search
+  ? drivers.filter(d =>
+      d.name.toLowerCase().includes(search.toLowerCase()) ||
+      d.license_number.toLowerCase().includes(search.toLowerCase())
+    )
+  : drivers
 
   return (
     <div>
@@ -103,12 +110,18 @@ export default function Drivers() {
           <option value="">All statuses</option>
           {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace('_', ' ')}</option>)}
         </select>
+        <input
+          placeholder="Search by name or license..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className={inputClass + ' w-auto bg-white'}
+        />
       </div>
 
-      {drivers.length === 0 ? (
+      {visible.length === 0 ? (
         <EmptyState label="No drivers yet" hint={writable ? 'Add the first driver profile.' : 'Ask a Safety Officer to register drivers.'} />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400">
               <tr>
@@ -121,7 +134,7 @@ export default function Drivers() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {drivers.map((d) => {
+              {visible.map((d) => {
                 const left = daysUntil(d.license_expiry)
                 const expired = left !== null && left < 0
                 const expiringSoon = left !== null && left >= 0 && left <= 30
