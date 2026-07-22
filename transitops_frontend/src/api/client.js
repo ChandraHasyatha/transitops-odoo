@@ -72,7 +72,8 @@ export default client
 // ---- Endpoint helpers, one place to keep them in sync with the backend ----
 
 export const authApi = {
-  login: (username, password) => axios.post(`${BASE_URL}/api/token/`, { username, password }),
+  login: (email, password) => axios.post(`${BASE_URL}/api/token/`, { email, password }),
+  register: (payload) => axios.post(`${BASE_URL}/api/register/`, payload),
 }
 
 export const vehiclesApi = {

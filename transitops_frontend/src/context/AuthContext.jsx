@@ -4,15 +4,33 @@ import { authApi } from '../api/client'
 
 const AuthContext = createContext(null)
 
-// Person A puts `role` and `username` directly in the JWT payload (Step 3 of
-// the backend guide) so we never need a separate /me call.
+// The backend puts `role`, `username`, `email`, and `full_name` directly in
+// the JWT payload (see RoleTokenSerializer.get_token in core/serializers.py)
+// so we never need a separate /me call.
 function decodeUser(accessToken) {
   try {
     const payload = jwtDecode(accessToken)
-    return { username: payload.username, role: payload.role }
+    return {
+      username: payload.username,
+      role: payload.role,
+      email: payload.email,
+      fullName: payload.full_name,
+    }
   } catch {
     return null
   }
+}
+
+// Pulls the first useful error message out of a DRF error response, whatever
+// shape it comes in (field errors, {detail: [...]}, or a plain string).
+function extractErrorMessage(err, fallback) {
+  const data = err.response?.data
+  if (!data) return fallback
+  if (typeof data === 'string') return data
+  const firstKey = Object.keys(data)[0]
+  if (!firstKey) return fallback
+  const value = data[firstKey]
+  return Array.isArray(value) ? value[0] : value
 }
 
 export function AuthProvider({ children }) {
@@ -33,19 +51,37 @@ export function AuthProvider({ children }) {
     return () => window.removeEventListener('storage', onStorage)
   }, [])
 
-  async function login(username, password) {
+  async function login(email, password) {
     setLoading(true)
     setError('')
     try {
-      const { data } = await authApi.login(username, password)
+      const { data } = await authApi.login(email, password)
       localStorage.setItem('access', data.access)
       localStorage.setItem('refresh', data.refresh)
       setUser(decodeUser(data.access))
       return true
     } catch (err) {
       setError(
-        err.response?.status === 401
-          ? 'Incorrect username or password.'
+        err.response
+          ? extractErrorMessage(err, 'Incorrect email or password.')
+          : 'Could not reach the server. Check the API is running.'
+      )
+      return false
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function register(payload) {
+    setLoading(true)
+    setError('')
+    try {
+      await authApi.register(payload)
+      return true
+    } catch (err) {
+      setError(
+        err.response
+          ? extractErrorMessage(err, 'Registration failed. Please check your details.')
           : 'Could not reach the server. Check the API is running.'
       )
       return false
@@ -61,7 +97,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, error, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, error, loading, setError }}>
       {children}
     </AuthContext.Provider>
   )
@@ -85,3 +121,12 @@ export const OWNER_ROLE = {
 export function canWrite(user, resource) {
   return !!user && user.role === OWNER_ROLE[resource]
 }
+
+// Used by the Register page dropdown, and kept in one place so it stays in
+// sync with core/models.py User.ROLE_CHOICES on the backend.
+export const ROLE_OPTIONS = [
+  { value: 'fleet_manager', label: 'Fleet Manager' },
+  { value: 'dispatcher', label: 'Dispatcher' },
+  { value: 'safety_officer', label: 'Safety Officer' },
+  { value: 'financial_analyst', label: 'Financial Analyst' },
+]
