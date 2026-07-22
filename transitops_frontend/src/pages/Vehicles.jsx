@@ -68,8 +68,21 @@ export default function Vehicles() {
   }
 
   function sortIndicator(key) {
-    if (sortKey !== key) return <span className="ml-1 text-slate-600">⇅</span>
-    return <span className="ml-1 text-white">{sortDir === 'asc' ? '↑' : '↓'}</span>
+    const active = sortKey === key
+    return (
+      <span className="ml-1.5 inline-flex flex-col items-center gap-[3px] align-middle">
+        <span
+          className={`h-0 w-0 border-x-[4px] border-b-[5px] border-x-transparent ${
+            active && sortDir === 'asc' ? 'border-b-white' : 'border-b-slate-600'
+          }`}
+        />
+        <span
+          className={`h-0 w-0 border-x-[4px] border-t-[5px] border-x-transparent ${
+            active && sortDir === 'desc' ? 'border-t-white' : 'border-t-slate-600'
+          }`}
+        />
+      </span>
+    )
   }
 
   async function handleSubmit(e) {

@@ -70,7 +70,7 @@ export default function Layout() {
 
       {/* Sidebar — fixed on desktop (md+), off-canvas drawer on mobile */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col bg-console-bg text-slate-300 transition-transform duration-300 md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col bg-console-bg text-slate-300 transition-transform duration-300 md:sticky md:top-0 md:h-screen md:translate-x-0 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

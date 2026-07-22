@@ -93,14 +93,14 @@ export default function FuelExpenses() {
             <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
               <table className="w-full text-sm">
                 <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-900 dark:text-slate-500">
-                  <tr><th className="px-4 py-3">Vehicle</th><th className="px-4 py-3">Category</th><th className="px-4 py-3">Amount</th><th className="px-4 py-3">Date</th></tr>
+                  <tr><th className="px-4 py-3 dark:text-slate-300">Vehicle</th><th className="px-4 py-3">Category</th><th className="px-4 py-3">Amount</th><th className="px-4 py-3">Date</th></tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                   {expenses.map((e) => (
                     <tr key={e.id}>
-                      <td className="mono px-4 py-3">{e.vehicle_registration || vehicleLabel(e.vehicle)}</td>
-                      <td className="px-4 py-3 capitalize">{e.category}</td>
-                      <td className="mono px-4 py-3">₹{e.amount}</td>
+                      <td className="mono px-4 py-3 dark:text-slate-300">{e.vehicle_registration || vehicleLabel(e.vehicle)}</td>
+                      <td className="px-4 py-3 capitalize dark:text-slate-300">{e.category}</td>
+                      <td className="mono px-4 py-3 dark:text-slate-300">₹{e.amount}</td>
                       <td className="px-4 py-3 text-slate-500">{e.date}</td>
                     </tr>
                   ))}
