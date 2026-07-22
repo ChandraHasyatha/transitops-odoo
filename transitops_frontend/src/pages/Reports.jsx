@@ -132,11 +132,24 @@ export default function Reports() {
                 Export CSV
               </button>
               <button
-                onClick={() => downloadPDF(rows)}
-                className="rounded-md border border-white/40 px-4 py-2 text-sm font-medium text-white hover:bg-white/10"
-              >
-                Export PDF
-              </button>
+  onClick={() => downloadPDF(rows)}
+  style={{
+    backgroundColor: '#f97316',
+    color: '#000000',
+    borderRadius: '6px',
+    padding: '8px 16px',
+    fontSize: '14px',
+    fontWeight: 500,
+    border: 'none',
+    cursor: 'pointer',
+  }}
+  onMouseOver={(e) => (e.target.style.filter = 'brightness(1.1)')}
+  onMouseOut={(e) => (e.target.style.filter = 'none')}
+>
+  Export PDF
+</button>
+
+             
             </div>
           )
         }
