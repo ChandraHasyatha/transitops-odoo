@@ -14,10 +14,11 @@ const KPI_DEFS = [
 ]
 
 const COLORS = ['#2ECC71', '#F5A524', '#EF4444']
+const STATUS_OPTIONS = ['available', 'on_trip', 'in_shop', 'retired']
 
 export default function Dashboard() {
   const [data, setData] = useState(null)
-  const [filters, setFilters] = useState({ vehicle_type: '', region: '' })
+  const [filters, setFilters] = useState({ vehicle_type: '',status: '', region: '' })
   const [err, setErr] = useState('')
 
   useEffect(() => {
@@ -56,6 +57,16 @@ export default function Dashboard() {
           onChange={(e) => setFilters((f) => ({ ...f, vehicle_type: e.target.value }))}
           className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
         />
+        <select
+          value={filters.status}
+          onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
+          className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+        >
+          <option value="">All statuses</option>
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s} value={s}>{s.replace('_', ' ')}</option>
+          ))}
+        </select>
         <input
           placeholder="Filter by region"
           value={filters.region}
