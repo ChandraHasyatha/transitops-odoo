@@ -9,6 +9,11 @@ class User(AbstractUser):
         ('safety_officer', 'Safety Officer'),
         ('financial_analyst', 'Financial Analyst'),
     ]
+    # Email is what users log in with (see RoleTokenSerializer), so it must
+    # be unique. `username` still exists internally (required by
+    # AbstractUser) but RegisterSerializer sets it equal to the email
+    # automatically — the user never has to think about it.
+    email = models.EmailField(unique=True)
     role = models.CharField(max_length=30, choices=ROLE_CHOICES)
 
 

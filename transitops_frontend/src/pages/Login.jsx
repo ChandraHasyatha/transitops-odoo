@@ -1,17 +1,20 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const { user, login, error, loading } = useAuth()
-  const [username, setUsername] = useState('')
+  const location = useLocation()
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   if (user) return <Navigate to="/" replace />
 
+  const justRegistered = location.state?.justRegistered
+
   async function handleSubmit(e) {
     e.preventDefault()
-    await login(username, password)
+    await login(email, password)
   }
 
   return (
@@ -23,6 +26,12 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="rounded-lg bg-console-panel p-6 shadow-xl">
+          {justRegistered && !error && (
+            <p className="mb-4 rounded-md border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
+              Registration successful — you can log in now.
+            </p>
+          )}
+
           {error && (
             <p className="mb-4 rounded-md border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
               {error}
@@ -30,14 +39,15 @@ export default function Login() {
           )}
 
           <label className="mb-4 block">
-            <span className="mb-1 block text-sm text-slate-300">Username</span>
+            <span className="mb-1 block text-sm text-slate-300">Email</span>
             <input
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               autoFocus
               required
               className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-signal-blue focus:outline-none"
-              placeholder="alex.dispatcher"
+              placeholder="alex.dispatcher@example.com"
             />
           </label>
 
@@ -62,7 +72,10 @@ export default function Login() {
           </button>
 
           <p className="mt-4 text-center text-xs text-slate-500">
-            Accounts are pre-created by the Fleet Manager in Django admin — there's no self-signup.
+            New user?{' '}
+            <Link to="/register" className="text-signal-amber hover:underline">
+              Register
+            </Link>
           </p>
         </form>
       </div>
