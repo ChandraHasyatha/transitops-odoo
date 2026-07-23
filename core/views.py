@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import RoleTokenSerializer,RegisterSerializer,VehicleSerializer,DriverSerializer,MaintenanceLogSerializer, FuelLogSerializer, ExpenseSerializer
+from .serializers import RoleTokenSerializer,RegisterSerializer,VehicleSerializer,DriverSerializer,MaintenanceLogSerializer, FuelLogSerializer, ExpenseSerializer, UpdateUsernameSerializer
 from .models import Vehicle, Driver,MaintenanceLog, FuelLog, Expense,Trip
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -103,6 +103,18 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [permissions.IsAuthenticated(), IsFinancialAnalyst()]
         return [permissions.IsAuthenticated()]
+
+
+class UpdateUsernameView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request):
+        serializer = UpdateUsernameSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        user.username = serializer.validated_data['username']
+        user.save(update_fields=['username'])
+        return Response({'username': user.username})
 
 
 class DashboardView(APIView):

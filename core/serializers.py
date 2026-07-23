@@ -148,3 +148,12 @@ class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
         fields = '__all__'
+
+
+class UpdateUsernameSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150, min_length=3)
+
+    def validate_username(self, value):
+        if get_user_model().objects.filter(username__iexact=value).exists():
+            raise serializers.ValidationError('This username is already taken.')
+        return value.strip()

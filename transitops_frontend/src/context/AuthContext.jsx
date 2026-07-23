@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
-import { authApi } from '../api/client'
+import { authApi, profileApi } from '../api/client'
 
 const AuthContext = createContext(null)
 
@@ -96,8 +96,13 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
+  async function updateUsername(username) {
+    const { data } = await profileApi.updateUsername(username)
+    setUser((prev) => ({ ...prev, username: data.username }))
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, error, loading, setError }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateUsername, error, loading, setError }}>
       {children}
     </AuthContext.Provider>
   )

@@ -121,3 +121,7 @@ export const expenseApi = {
 export const dashboardApi = {
   get: (params) => client.get('/api/dashboard/', { params }),
 }
+
+export const profileApi = {
+  updateUsername: (username) => client.patch('/api/profile/username/', { username }),
+}

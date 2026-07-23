@@ -3,6 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useDarkMode } from "../hooks/useDarkMode";
 import logo from "../assets/logo.jpg";
+import { FaPencilAlt } from "react-icons/fa";
 
 import {
   FaTachometerAlt,
@@ -39,9 +40,21 @@ const ROLE_LABEL = {
 };
 
 export default function Layout() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUsername } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dark, setDark] = useDarkMode();
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+
+  async function handleUpdateUsername() {
+    if (!newUsername.trim()) return;
+    try {
+      await updateUsername(newUsername.trim());
+      setEditingUsername(false);
+    } catch {
+      // error handled upstream
+    }
+  }
 
   return (
     <div className="flex min-h-screen bg-[#F5F6F8] dark:bg-slate-900">
@@ -105,7 +118,7 @@ export default function Layout() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-2 overflow-y-auto px-3 py-4">
+        <nav className="sidebar-scroll flex-1 space-y-2 overflow-y-auto px-3 py-4">
           {NAV.map((item) => (
             <NavLink
               key={item.to}
@@ -127,26 +140,59 @@ export default function Layout() {
         </nav>
 
         {/* User Card */}
-        <div className="border-t border-white/10 p-5">
+        <div className="border-t border-white/10 p-3">
 
-          <div className="rounded-xl bg-white/5 p-4 shadow-lg">
+          <div className="rounded-xl bg-white/5 px-3 py-2.5 shadow-lg">
 
-            <div className="flex items-center gap-2">
-              <FaUserCircle className="text-amber-400 text-lg" />
-              <span className="text-sm text-slate-300">Username</span>
+            <div className="flex items-center gap-1.5">
+              <FaUserCircle className="text-amber-400 text-xs" />
+              <span className="text-[11px] text-slate-400 uppercase tracking-wider">Username</span>
             </div>
 
-            <p className="mt-1 text-lg font-semibold text-white">
-              {user?.username}
-            </p>
+            {editingUsername ? (
+              <div className="mt-1 flex gap-1">
+                <input
+                  autoFocus
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleUpdateUsername()}
+                  className="w-full rounded bg-white/10 px-2 py-1 text-xs text-white outline-none focus:ring-1 focus:ring-amber-400"
+                  placeholder={user?.username}
+                />
+                <button
+                  onClick={handleUpdateUsername}
+                  className="rounded bg-amber-500 px-2 py-1 text-xs text-white hover:bg-amber-600"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setEditingUsername(false)}
+                  className="rounded bg-white/10 px-2 py-1 text-xs text-slate-300 hover:bg-white/20"
+                >
+                  X
+                </button>
+              </div>
+            ) : (
+              <div className="mt-0.5 flex items-center gap-2">
+                <p className="text-sm font-semibold text-white">
+                  {user?.username}
+                </p>
+                <button
+                  onClick={() => { setNewUsername(user?.username || ""); setEditingUsername(true); }}
+                  className="text-slate-500 hover:text-amber-400 transition-colors"
+                >
+                  <FaPencilAlt className="text-[10px]" />
+                </button>
+              </div>
+            )}
 
-            <div className="mt-4 flex items-center gap-2">
-              <FaIdBadge className="text-amber-400 text-lg" />
-              <span className="text-sm text-slate-300">Role</span>
+            <div className="mt-2.5 flex items-center gap-1.5">
+              <FaIdBadge className="text-amber-400 text-xs" />
+              <span className="text-[11px] text-slate-400 uppercase tracking-wider">Role</span>
             </div>
 
-            <p className="mt-1 text-base font-medium text-amber-400">
-              {ROLE_LABEL[user?.role] || user?.role}
+            <p className="mt-0.5 text-xs font-semibold text-white" id="sidebar-role">
+              {ROLE_LABEL[user?.role] || (user?.role ? user.role : '—')}
             </p>
 
           </div>

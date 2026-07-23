@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.routers import DefaultRouter
-from core.views import RoleTokenView, RegisterView, VehicleViewSet, DriverViewSet, MaintenanceLogViewSet, FuelLogViewSet, ExpenseViewSet, DashboardView
+from core.views import RoleTokenView, RegisterView, VehicleViewSet, DriverViewSet, MaintenanceLogViewSet, FuelLogViewSet, ExpenseViewSet, DashboardView, UpdateUsernameView
 from core.views_trip import TripViewSet, VehicleReportView, ExportCSVView
 
 router = DefaultRouter()
@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/token/', RoleTokenView.as_view()),
     path('api/token/refresh/', TokenRefreshView.as_view()),
     path('api/register/', RegisterView.as_view()),
+    path('api/profile/username/', UpdateUsernameView.as_view()),
     path('api/dashboard/', DashboardView.as_view()),
     path('api/reports/vehicles/<int:pk>/', VehicleReportView.as_view()),
     path('api/reports/export/', ExportCSVView.as_view()),
